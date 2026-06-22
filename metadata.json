@@ -1,0 +1,6 @@
+{
+  "name": "RzKredit",
+  "description": "RzKredit Premium - Ultimate mobile edition credit administration and ledger board",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
