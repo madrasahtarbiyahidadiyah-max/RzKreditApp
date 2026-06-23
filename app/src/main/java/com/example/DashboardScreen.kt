@@ -414,6 +414,29 @@ fun DashboardScreen(viewModel: KreditViewModel) {
             .heightIn(min = 350.dp, max = 600.dp)
         )
       }
+
+      item {
+        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
+      }
+
+      // 6. RIWAYAT TRANSAKSI & CETAK STRUK JPG
+      item {
+        Text(
+          text = "🧾 RIWAYAT SETORAN & CETAK STRUK (JPG)",
+          fontSize = 12.sp,
+          fontWeight = FontWeight.Black,
+          color = MaterialTheme.colorScheme.secondary
+        )
+      }
+
+      item {
+        CardHistorySetoran(
+          viewModel = viewModel,
+          modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(min = 350.dp, max = 500.dp)
+        )
+      }
     }
   }
 }

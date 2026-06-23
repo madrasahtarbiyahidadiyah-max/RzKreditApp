@@ -90,7 +90,7 @@ fun formatRupiah(value: Double): String {
 }
 
 // LOGO CONFIGURATION STRINGS
-const val APP_LOGO_URL = "https://i.postimg.cc/sfNDS3Mn/Whats-App-Image-2026-06-02-at-10-33-41.jpg"
+const val APP_LOGO_URL = "https://i.postimg.cc/3x9HWhJ2/Whats-App-Image-2026-06-02-at-10-33-41.jpg"
 
 @Composable
 fun LoginScreen(viewModel: KreditViewModel) {

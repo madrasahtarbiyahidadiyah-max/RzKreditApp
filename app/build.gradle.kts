@@ -1,3 +1,10 @@
+import java.net.URL
+import org.gradle.api.provider.Property
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.TaskAction
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
@@ -63,6 +70,40 @@ android {
 secrets {
   propertiesFileName = ".env"
   defaultPropertiesFileName = ".env.example"
+}
+
+abstract class DownloadIconTask : DefaultTask() {
+  @get:Input
+  abstract val iconUrl: Property<String>
+
+  @get:OutputFile
+  abstract val outputFile: RegularFileProperty
+
+  @TaskAction
+  fun download() {
+    try {
+      val url = URL(iconUrl.get())
+      val file = outputFile.get().asFile
+      file.parentFile.mkdirs()
+      url.openStream().use { input ->
+        file.outputStream().use { output ->
+          input.copyTo(output)
+        }
+      }
+      logger.lifecycle("App icon logo downloaded successfully!")
+    } catch (e: Exception) {
+      logger.error("Failed to download app icon logo: ${e.message}")
+    }
+  }
+}
+
+val downloadAppIconTask = tasks.register<DownloadIconTask>("downloadAppIcon") {
+  iconUrl.set("https://i.postimg.cc/3x9HWhJ2/Whats-App-Image-2026-06-02-at-10-33-41.jpg")
+  outputFile.set(layout.projectDirectory.file("src/main/res/drawable/rzkredit_logo.jpg"))
+}
+
+tasks.named("preBuild") {
+  dependsOn(downloadAppIconTask)
 }
 
 // Some unused dependencies are commented out below instead of being removed.
