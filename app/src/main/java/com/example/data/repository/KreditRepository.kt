@@ -57,7 +57,7 @@ class KreditRepository(
         return Result.success("Data peminjam baru berhasil disimpan!")
     }
 
-    suspend fun simpanSetoran(nama: String, jumlahSetoran: Double): Result<String> {
+    suspend fun simpanSetoran(nama: String, jumlahSetoran: Double): Result<SetoranEntity> {
         val trimmedName = nama.trim()
         if (trimmedName.isEmpty()) {
             return Result.failure(Exception("Pilih debitur!"))
@@ -96,9 +96,10 @@ class KreditRepository(
             nama = peminjam.nama,
             jumlahSetoran = jumlahSetoran
         )
-        setoranDao.insertSetoran(setoranLog)
+        val generatedId = setoranDao.insertSetoran(setoranLog)
+        val finalEntity = setoranLog.copy(id = generatedId.toInt())
 
-        return Result.success("Sukses")
+        return Result.success(finalEntity)
     }
 
     suspend fun clearAllData() {

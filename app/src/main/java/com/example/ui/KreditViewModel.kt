@@ -34,6 +34,11 @@ class KreditViewModel(application: Application) : AndroidViewModel(application) 
     // Form inputs: Setoran
     val setoranNamaSelection = MutableStateFlow("")
     val setoranJumlahInput = MutableStateFlow("")
+    val lastSavedSetoran = MutableStateFlow<SetoranEntity?>(null)
+
+    fun clearLastSavedSetoran() {
+        lastSavedSetoran.value = null
+    }
 
     // Success notifications / Toasts
     private val _toastMessage = MutableSharedFlow<String>()
@@ -158,8 +163,9 @@ class KreditViewModel(application: Application) : AndroidViewModel(application) 
             }
 
             val result = repository.simpanSetoran(nameValue, amount)
-            result.onSuccess {
+            result.onSuccess { setoranLog ->
                 _toastMessage.emit("💰 Terimakasih, Uang Sudah Masuk")
+                lastSavedSetoran.value = setoranLog
                 // Clear state
                 setoranNamaSelection.value = ""
                 setoranJumlahInput.value = ""

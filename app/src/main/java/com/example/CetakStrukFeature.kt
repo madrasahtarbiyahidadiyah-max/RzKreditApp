@@ -547,20 +547,32 @@ fun CardHistorySetoran(viewModel: KreditViewModel, modifier: Modifier = Modifier
                   color = if (isDarkTheme) ColorPayEmerald else ColorPayEmeraldDark
                 )
 
-                IconButton(
+                Button(
                   onClick = { activeSetoranToPrint = setoran },
-                  modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(ColorHoldSky.copy(alpha = 0.15f))
-                    .border(1.dp, ColorHoldSky.copy(alpha = 0.3f), CircleShape)
+                  contentPadding = PaddingValues(horizontal = 10.dp, vertical = 6.dp),
+                  colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isDarkTheme) ColorHoldSky.copy(alpha = 0.2f) else ColorHoldSky,
+                    contentColor = if (isDarkTheme) ColorHoldSky else Color.White
+                  ),
+                  shape = RoundedCornerShape(8.dp),
+                  border = BorderStroke(1.dp, if (isDarkTheme) ColorHoldSky.copy(alpha = 0.4f) else ColorHoldSkyDark),
+                  modifier = Modifier.height(34.dp)
                 ) {
-                  Icon(
-                    imageVector = Icons.Default.ReceiptLong,
-                    contentDescription = "Cetak Resi JPG",
-                    tint = if (isDarkTheme) ColorHoldSky else ColorHoldSkyDark,
-                    modifier = Modifier.size(18.dp)
-                  )
+                  Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                  ) {
+                    Icon(
+                      imageVector = Icons.Default.ReceiptLong,
+                      contentDescription = "Cetak Resi JPG",
+                      modifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                      text = "Cetak",
+                      fontWeight = FontWeight.Bold,
+                      fontSize = 11.sp
+                    )
+                  }
                 }
               }
             }

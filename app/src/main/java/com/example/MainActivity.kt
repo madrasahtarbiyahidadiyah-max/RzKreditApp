@@ -733,6 +733,95 @@ fun CardFormSetoran(viewModel: KreditViewModel) {
       ) {
         Text("SIMPAN SETORAN TUNAI", fontWeight = FontWeight.Black, fontSize = 13.sp)
       }
+
+      // INTEGRASI CETAK STRUK JPG SETORAN TERAKHIR (REAL-TIME, TANPA CONTOH / CLUTTER)
+      val listHistorySetoran by viewModel.listHistorySetoran.collectAsState()
+      val lastSetoran = listHistorySetoran.lastOrNull()
+
+      if (lastSetoran != null) {
+        HorizontalDivider(
+          color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f),
+          modifier = Modifier.padding(vertical = 4.dp)
+        )
+
+        var showReceiptDialogForLast by remember { mutableStateOf(false) }
+
+        if (showReceiptDialogForLast) {
+          val correlatedDebitur = listNasabah.find { it.nama.lowercase() == lastSetoran.nama.lowercase() }
+          ReceiptPreviewDialog(
+            setoran = lastSetoran,
+            peminjam = correlatedDebitur,
+            onDismiss = { showReceiptDialogForLast = false }
+          )
+        }
+
+        Column(
+          modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(if (isDarkTheme) Color(0xFF1E293B) else Color(0xFFF1F5F9))
+            .border(1.dp, if (isDarkTheme) Color(0xFF334155) else Color(0xFFE2E8F0), RoundedCornerShape(10.dp))
+            .padding(12.dp),
+          verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+          Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+          ) {
+            Column(modifier = Modifier.weight(1f)) {
+              Text(
+                text = "STRUK TERAKHIR TERCATAT",
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Black,
+                color = if (isDarkTheme) ColorPayEmerald else ColorPayEmeraldDark,
+                letterSpacing = 0.5.sp
+              )
+              Text(
+                text = "${lastSetoran.nama}",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+              )
+              Text(
+                text = "Rp " + formatRupiahShort(lastSetoran.jumlahSetoran).replace("Rp ", "").replace("Rp", ""),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Black,
+                color = if (isDarkTheme) ColorPayEmerald else ColorPayEmeraldDark
+              )
+            }
+
+            Button(
+              onClick = { showReceiptDialogForLast = true },
+              shape = RoundedCornerShape(8.dp),
+              colors = ButtonDefaults.buttonColors(
+                containerColor = ColorHoldSky,
+                contentColor = Color.White
+              ),
+              contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
+              modifier = Modifier.height(36.dp)
+            ) {
+              Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+              ) {
+                Icon(
+                  imageVector = Icons.Default.Receipt,
+                  contentDescription = null,
+                  modifier = Modifier.size(16.dp)
+                )
+                Text(
+                  text = "Cetak JPG",
+                  fontWeight = FontWeight.Bold,
+                  fontSize = 11.sp
+                )
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

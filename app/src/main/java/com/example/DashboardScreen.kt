@@ -40,6 +40,19 @@ fun DashboardScreen(viewModel: KreditViewModel) {
   val totalUangDihutang by viewModel.totalUangDihutang.collectAsState()
   val totalUangMasuk by viewModel.totalUangMasuk.collectAsState()
   val totalPiutang by viewModel.totalPiutang.collectAsState()
+  val lastSavedSetoran by viewModel.lastSavedSetoran.collectAsState()
+  val listNasabah by viewModel.listNasabah.collectAsState()
+
+  // Auto show print popup on success
+  if (lastSavedSetoran != null) {
+    val setoran = lastSavedSetoran!!
+    val correlatedDebitur = listNasabah.find { it.nama.lowercase() == setoran.nama.lowercase() }
+    ReceiptPreviewDialog(
+      setoran = setoran,
+      peminjam = correlatedDebitur,
+      onDismiss = { viewModel.clearLastSavedSetoran() }
+    )
+  }
 
   // State to toggle the interactive floating simulation modal / calculator card
   var showSimulationCalculator by remember { mutableStateOf(false) }
@@ -412,29 +425,6 @@ fun DashboardScreen(viewModel: KreditViewModel) {
           modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 350.dp, max = 600.dp)
-        )
-      }
-
-      item {
-        Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f))
-      }
-
-      // 6. RIWAYAT TRANSAKSI & CETAK STRUK JPG
-      item {
-        Text(
-          text = "🧾 RIWAYAT SETORAN & CETAK STRUK (JPG)",
-          fontSize = 12.sp,
-          fontWeight = FontWeight.Black,
-          color = MaterialTheme.colorScheme.secondary
-        )
-      }
-
-      item {
-        CardHistorySetoran(
-          viewModel = viewModel,
-          modifier = Modifier
-            .fillMaxWidth()
-            .heightIn(min = 350.dp, max = 500.dp)
         )
       }
     }
