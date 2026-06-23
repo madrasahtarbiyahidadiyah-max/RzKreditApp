@@ -17,15 +17,13 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
 
-    - name: 3. Membuka Kunci Akses Gradle
-      run: chmod +x ./gradlew
+    - name: 3. Menyiapkan Gradle & Langsung Rakit APK
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        arguments: assembleDebug
 
-    - name: 4. Memulai Perakitan Aplikasi (Build APK)
-      run: ./gradlew assembleDebug
-
-    - name: 5. Menyimpan Hasil Mentahan APK
+    - name: 4. Menyimpan Hasil Mentahan APK
       uses: actions/upload-artifact@v4
       with:
         name: RzKredit-App-Terbaru
