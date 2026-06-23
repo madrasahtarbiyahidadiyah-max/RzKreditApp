@@ -1,0 +1,32 @@
+name: RzKredit APK Builder
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 1. Mengambil Kode dari GitHub
+      uses: actions/checkout@v4
+
+    - name: 2. Menyiapkan Mesin Java (JDK 17)
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: 3. Membuka Kunci Akses Gradle
+      run: chmod +x ./gradlew
+
+    - name: 4. Memulai Perakitan Aplikasi (Build APK)
+      run: ./gradlew assembleDebug
+
+    - name: 5. Menyimpan Hasil Mentahan APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: RzKredit-App-Terbaru
+        path: app/build/outputs/apk/debug/app-debug.apk
