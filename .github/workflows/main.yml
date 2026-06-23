@@ -18,9 +18,10 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: 3. Menyiapkan Gradle & Langsung Rakit APK
+    - name: 3. Install Gradle 8.7 & Rakit APK
       uses: gradle/actions/setup-gradle@v3
       with:
+        gradle-version: '8.7'
         arguments: assembleDebug
 
     - name: 4. Menyimpan Hasil Mentahan APK
